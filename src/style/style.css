@@ -1,4 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;500;600;700&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'STIX Two Text', serif;
+}
+
 .title {
+  margin: 1rem;
   text-align: center;
   color: blue;
+}
+.main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.inputs{
+  width: 60%;
+  background-color: aquamarine;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+}
+
+.history{
+  color:gray;
+  background-color: green;
+  font-size: 16px;
+  margin-bottom: 0.5rem;
+}
+
+.history.right-text{
+  padding: 0 10px;
+}
+
+.current{
+  background-color: red;
+  font-size: 24px;
+}
+
+.right-text{
+  text-align: right;
+  padding: 5px 10px;
+}
+
+.buttons{  
+  width: 60%;
+  /* background-color: azure; */
+  padding: 0.5rem;
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+  display: flex;  
+  justify-content: space-between;
+}
+
+table{
+  margin: 5px;
+}
+
+.first-table{
+  width: 40%;
+  /* background-color: burlywood; */
+}
+
+.second-table{
+  width: 60%;
+  /* background-color: chartreuse; */
+}
+
+tr{
+  display: flex;
+  justify-content: space-between;
+}
+
+.first-table td{  
+  width: 33%;
+  text-align: center;
+  background: #dadce0;
+  color: #202124;
+  border: 1px solid #dadce0;
+  border-radius: 4px;  
+  height: 27px;
+  line-height: 26px;
+  margin: 2px;  
+  cursor: pointer;
+}
+
+.second-table td{  
+  width: 25%;
+  text-align: center;
+  background: #dadce0;
+  color: #202124;
+  border: 1px solid #dadce0;
+  border-radius: 4px;  
+  height: 27px;
+  line-height: 26px;
+  margin: 2px;  
+  cursor: pointer;
+}
+
+.second-table td.number{
+  background-color: #f1f3f4;
+  border: 1px solid #f1f3f4;
+}
+
+table sup{
+  font-size: 8px;
+  line-height: 8px;
+}
+
+table sub{
+  font-size: 8px;
+  line-height: 8px;
+}
+
+table .koren sup{
+  font-size: 8px;
+  line-height: 24px;
+  position: relative;
+  left:6px;
+  top:-6px;
 }
