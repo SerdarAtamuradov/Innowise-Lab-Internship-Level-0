@@ -10,8 +10,9 @@
 .title {
   margin: 1rem;
   text-align: center;
-  color: blue;
+  color: #585454;
 }
+
 .main{
   display: flex;
   justify-content: center;
@@ -21,7 +22,6 @@
 
 .inputs{
   width: 60%;
-  background-color: aquamarine;
   padding: 1rem;
   margin-bottom: 1rem;
   border: 1px solid #ebebeb;
@@ -29,10 +29,8 @@
 }
 
 .history{
-  color:gray;
-  background-color: green;
-  font-size: 16px;
-  margin-bottom: 0.5rem;
+  color:#70757a;
+  font-size: 13px;
 }
 
 .history.right-text{
@@ -40,7 +38,6 @@
 }
 
 .current{
-  background-color: red;
   font-size: 24px;
 }
 
@@ -51,7 +48,6 @@
 
 .buttons{  
   width: 60%;
-  /* background-color: azure; */
   padding: 0.5rem;
   border: 1px solid #ebebeb;
   border-radius: 8px;
@@ -65,12 +61,10 @@ table{
 
 .first-table{
   width: 40%;
-  /* background-color: burlywood; */
 }
 
 .second-table{
   width: 60%;
-  /* background-color: chartreuse; */
 }
 
 tr{
@@ -87,7 +81,7 @@ tr{
   border-radius: 4px;  
   height: 27px;
   line-height: 26px;
-  margin: 2px;  
+  margin: 3px;  
   cursor: pointer;
 }
 
@@ -100,7 +94,7 @@ tr{
   border-radius: 4px;  
   height: 27px;
   line-height: 26px;
-  margin: 2px;  
+  margin: 3px;  
   cursor: pointer;
 }
 
