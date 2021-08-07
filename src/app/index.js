@@ -2,6 +2,7 @@ import '../style/style.css'
 let eNumber = 2.71828182846,
   memory = 0,
   result = 0,
+  current = 0,
   firstMultiplier = 0,
   secondMultiplier = 0,
   historyExpression = ' ',
@@ -26,77 +27,128 @@ tables.onclick = function (event) {
   historyExpressionElem.innerText = historyExpression
 }
 
+function handleResult(action, firstVar, secondVar) {
+  switch (action) {
+    case 'add':
+      return firstVar + secondVar
+    case 'subtract':
+      return secondVar - firstVar
+    case 'equal':
+      return secondMultiplier
+    case 'clear':
+      return
+    default:
+      return firstVar
+  }
+}
+
 const handleClick = (action, value) => {
   switch (action) {
+    case 'equal':
+      if (!currentExpression || lastAction === 'equal') {
+        historyExpression = currentExpression
+        break
+      }
+      console.log('firstMultiplier', firstMultiplier)
+
+      result = handleResult(lastAction, firstMultiplier, secondMultiplier)
+      if (result === null) break
+      secondMultiplier = result
+      console.log('secondMultiplier', secondMultiplier)
+
+      historyExpression += currentExpression + ' = '
+
+      currentExpression = ''
+      lastAction = action
+      canPutDot = true
+
+      break
+    case 'add':
+      console.log('firstMultiplier', firstMultiplier)
+
+      result = handleResult(lastAction, firstMultiplier, secondMultiplier)
+
+      secondMultiplier = result
+      console.log('secondMultiplier', secondMultiplier)
+
+      if (!historyExpression) historyExpression = currentExpression + ' + '
+      else if (lastAction !== 'equal') historyExpression += firstMultiplier + ' + '
+      else historyExpression = result + ' + '
+
+      currentExpression = ''
+      lastAction = action
+      canPutDot = true
+      break
+    case 'subtract':
+      console.log('firstMultiplier', firstMultiplier)
+      result = handleResult(lastAction, firstMultiplier, secondMultiplier)
+
+      secondMultiplier = result
+      console.log('secondMultiplier', secondMultiplier)
+
+      if (!historyExpression) historyExpression = currentExpression
+      else if (lastAction !== 'equal') historyExpression += firstMultiplier + ' - '
+      else historyExpression = result + ' - '
+
+      currentExpression = ''
+      lastAction = action
+      canPutDot = true
+
+      break
     case 'dot':
       if (!canPutDot) break
-      else currentExpression += !currentExpression ? '0' + value : value
+      else currentExpression += !currentExpression ? '0' + value : setNumbers(value, action)
       canPutDot = false
       break
     case '0':
       if (currentExpression[0] == '0' && currentExpression[1] != '.') break
-      // currentExpression += !currentExpression ? value : value
-      if (!currentExpression) currentExpression = value
-      else currentExpression += value
+
+      if (!currentExpression) setNumbers(value, action)
+      else setNumbers(value, action)
       break
     case '1':
-      currentExpression += Number(value)
+      setNumbers(value, action)
       break
     case '2':
-      currentExpression += Number(value)
+      setNumbers(value, action)
       break
     case '3':
-      currentExpression += Number(value)
+      setNumbers(value, action)
       break
     case '4':
-      currentExpression += Number(value)
+      setNumbers(value, action)
       break
     case '5':
-      currentExpression += Number(value)
+      setNumbers(value, action)
       break
     case '6':
-      currentExpression += Number(value)
+      setNumbers(value, action)
       break
     case '7':
-      currentExpression += Number(value)
+      setNumbers(value, action)
       break
     case '8':
-      currentExpression += Number(value)
+      setNumbers(value, action)
       break
     case '9':
-      currentExpression += Number(value)
+      setNumbers(value, action)
       break
     case 'clear':
       clearValues()
       break
-    case 'equal':
-      if (!currentExpression || lastAction === 'equal') break
-      secondMultiplier = Number(currentExpression)
-      console.log(secondMultiplier)
-      currentExpression += ' ='
-      historyExpression += currentExpression
-      // result = firstMultiplier + secondMultiplier
-      result = handle(lastAction, firstMultiplier, secondMultiplier)
-      if (result === null) break
-      firstMultiplier = result
-      currentExpression = ''
-      lastAction = action
-      console.log(lastAction)
-      break
-    case 'add':
-      // if(!currentExpression) break
-      firstMultiplier += Number(currentExpression)
-      result = firstMultiplier
-      currentExpression += ' +'
-      if (!historyExpression) historyExpression += currentExpression
-      else historyExpression = result + ' + '
-      currentExpression = ''
-      lastAction = action
-      console.log(lastAction)
-      break
     default:
       break
   }
+}
+
+function setNumbers(value, action) {
+  if (lastAction === 'equal') {
+    clearValues()
+    lastAction = action
+  }
+
+  currentExpression += value
+  firstMultiplier = Number(currentExpression)
 }
 
 function clearValues() {
@@ -106,18 +158,9 @@ function clearValues() {
   historyExpression = ''
   currentExpression = ''
   canPutDot = true
+  lastAction = ''
 }
 
-function handle(action, firstVar, secondVar) {
-  switch (action) {
-    case 'add':
-      return firstVar + secondVar
-    case 'equal':
-      return null
-    default:
-      return 0
-  }
-}
 //sortByTypeOfOperations
 //handleSingleOperators
 //handleCoupleOperators
