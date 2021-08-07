@@ -32,8 +32,13 @@
   flex-direction: column;
 }
 
+.content span{
+  display: inline-block;
+}
+
 input{
-  border:0;
+  border:none; 
+  border-color: #fff;
   text-align: right;
 }
 

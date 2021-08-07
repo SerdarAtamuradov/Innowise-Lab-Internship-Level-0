@@ -32,8 +32,8 @@ tables.onclick = function (event) {
 
   // if (currentExpression) currentExpressionElem.value = currentExpression
   // else currentExpressionElem.value = firstMultiplier
-  currentExpressionElem.value = currentExpression || firstMultiplier
-  // historyExpressionElem.value = historyExpression
+  currentExpressionElem.innerText = currentExpression || firstMultiplier
+  historyExpressionElem.innerText = historyExpression
 }
 
 const handleClickOfNumbers = (action, value) => {
@@ -78,25 +78,27 @@ const handleClickOfNumbers = (action, value) => {
       clearValues()
       break
     case 'equal':
+      if (!currentExpression) break
       firstMultiplier += Number(currentExpression)
       console.log(firstMultiplier)
       currentExpression += ' ='
       historyExpression += currentExpression
-      historyExpressionElem.value = historyExpression
-      historyExpression = firstMultiplier
+      // historyExpressionElem.value = historyExpression
+      // historyExpression = firstMultiplier
       currentExpression = ''
       break
     case 'add':
+      // if(!currentExpression) break
       firstMultiplier += Number(currentExpression)
       console.log(firstMultiplier)
       currentExpression += ' +'
-      historyExpression += currentExpression
-      historyExpressionElem.value = historyExpression
+      if (!historyExpression) historyExpression += currentExpression
+      else historyExpression = firstMultiplier + ' + '
+      // historyExpressionElem.value = historyExpression
       // historyExpression = currentExpression + ''
-      currentExpression = ' '
+      currentExpression = ''
       break
     default:
-      // currentExpression += ''
       break
   }
 }
