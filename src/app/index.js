@@ -1,16 +1,17 @@
 import '../style/style.css'
 let eNumber = 2.71828182846,
   memory = 0,
+  result = 0,
   firstMultiplier = 0,
   secondMultiplier = 0,
   historyExpression = ' ',
-  currentExpression = ''
+  currentExpression = '',
+  canPutDot = true,
+  lastAction = ''
 
 const tables = document.querySelector('.tables'),
   historyExpressionElem = document.querySelector('.content__history'),
   currentExpressionElem = document.querySelector('.content__current')
-// const table1 = document.querySelector('.tables__first-table')
-// const table2 = document.querySelector('.tables__second-table')
 
 tables.onclick = function (event) {
   let td = event.target.closest('td')
@@ -19,84 +20,79 @@ tables.onclick = function (event) {
 
   if (!tables.contains(td)) return
 
-  // console.log(td.dataset.action)
+  handleClick(td.dataset.action, td.innerText)
 
-  handleClickOfNumbers(td.dataset.action, td.innerText)
-
-  // history += ` ${td.innerText}`
-
-  /* console.log(target.dataset)
-   console.log(td.innerText)*/
-
-  // historyExpressionElem.value = history
-
-  // if (currentExpression) currentExpressionElem.value = currentExpression
-  // else currentExpressionElem.value = firstMultiplier
-  currentExpressionElem.innerText = currentExpression || firstMultiplier
+  currentExpressionElem.innerText = currentExpression || result
   historyExpressionElem.innerText = historyExpression
 }
 
-const handleClickOfNumbers = (action, value) => {
+const handleClick = (action, value) => {
   switch (action) {
+    case 'dot':
+      if (!canPutDot) break
+      else currentExpression += !currentExpression ? '0' + value : value
+      canPutDot = false
+      break
     case '0':
-      // if (firstMultiplier.startsWith('0')) return ''
-      // else return '0'
-      // return 0
-      currentExpression += value
+      if (currentExpression[0] == '0' && currentExpression[1] != '.') break
+      // currentExpression += !currentExpression ? value : value
+      if (!currentExpression) currentExpression = value
+      else currentExpression += value
       break
     case '1':
-      currentExpression += value
+      currentExpression += Number(value)
       break
     case '2':
-      currentExpression += value
+      currentExpression += Number(value)
       break
     case '3':
-      currentExpression += value
+      currentExpression += Number(value)
       break
     case '4':
-      currentExpression += value
+      currentExpression += Number(value)
       break
     case '5':
-      currentExpression += value
+      currentExpression += Number(value)
       break
     case '6':
-      currentExpression += value
+      currentExpression += Number(value)
       break
     case '7':
-      currentExpression += value
+      currentExpression += Number(value)
       break
     case '8':
-      currentExpression += value
+      currentExpression += Number(value)
       break
     case '9':
-      currentExpression += value
-      break
-    case 'dot':
-      currentExpression += value
+      currentExpression += Number(value)
       break
     case 'clear':
       clearValues()
       break
     case 'equal':
-      if (!currentExpression) break
-      firstMultiplier += Number(currentExpression)
-      console.log(firstMultiplier)
+      if (!currentExpression || lastAction === 'equal') break
+      secondMultiplier = Number(currentExpression)
+      console.log(secondMultiplier)
       currentExpression += ' ='
       historyExpression += currentExpression
-      // historyExpressionElem.value = historyExpression
-      // historyExpression = firstMultiplier
+      // result = firstMultiplier + secondMultiplier
+      result = handle(lastAction, firstMultiplier, secondMultiplier)
+      if (result === null) break
+      firstMultiplier = result
       currentExpression = ''
+      lastAction = action
+      console.log(lastAction)
       break
     case 'add':
       // if(!currentExpression) break
       firstMultiplier += Number(currentExpression)
-      console.log(firstMultiplier)
+      result = firstMultiplier
       currentExpression += ' +'
       if (!historyExpression) historyExpression += currentExpression
-      else historyExpression = firstMultiplier + ' + '
-      // historyExpressionElem.value = historyExpression
-      // historyExpression = currentExpression + ''
+      else historyExpression = result + ' + '
       currentExpression = ''
+      lastAction = action
+      console.log(lastAction)
       break
     default:
       break
@@ -106,9 +102,25 @@ const handleClickOfNumbers = (action, value) => {
 function clearValues() {
   firstMultiplier = 0
   secondMultiplier = 0
+  result = 0
   historyExpression = ''
   currentExpression = ''
+  canPutDot = true
 }
+
+function handle(action, firstVar, secondVar) {
+  switch (action) {
+    case 'add':
+      return firstVar + secondVar
+    case 'equal':
+      return null
+    default:
+      return 0
+  }
+}
+//sortByTypeOfOperations
+//handleSingleOperators
+//handleCoupleOperators
 
 // table2.onclick = function (event) {
 //   let td = event.target.closest('td')
