@@ -1,14 +1,15 @@
 import '../style/style.css'
-let eNumber = 2.71828182846,
-  memory = 0,
-  result = 0,
-  current = 0,
-  firstMultiplier = 0,
-  secondMultiplier = 0,
+
+let result = 0,
+  nextNumber = 0,
+  previousNumber = 0,
   historyExpression = ' ',
   currentExpression = '',
   canPutDot = true,
-  lastAction = ''
+  lastAction = '',
+  firstMultiplier
+// eNumber = 2.71828182846,
+// memory = 0
 
 const tables = document.querySelector('.tables'),
   historyExpressionElem = document.querySelector('.content__history'),
@@ -27,19 +28,86 @@ tables.onclick = function (event) {
   historyExpressionElem.innerText = historyExpression
 }
 
+function handleActionSymbols(action) {
+  switch (action) {
+    case 'add':
+      return ' + '
+    case 'subtract':
+      return ' - '
+    case 'multiply':
+      return ' × '
+    case 'divide':
+      return ' ÷ '
+    case 'equal':
+      return ' = '
+    default:
+      return
+  }
+}
+
 function handleResult(action, firstVar, secondVar) {
   switch (action) {
     case 'add':
       return firstVar + secondVar
     case 'subtract':
       return secondVar - firstVar
+    case 'multiply':
+      return firstVar * secondVar
+    case 'divide':
+      return firstVar / secondVar
     case 'equal':
-      return secondMultiplier
-    case 'clear':
-      return
+      return nextNumber
     default:
       return firstVar
   }
+}
+
+function handleCases(action) {
+  // console.log('previousNumber', previousNumber)
+  console.log('nextNumber', nextNumber)
+
+  if (firstMultiplier) {
+    console.log('firstMultiplier', firstMultiplier)
+    console.log('previousNumber', previousNumber)
+    result += handleResult(lastAction, firstMultiplier, previousNumber)
+    console.log('result', result)
+    firstMultiplier = undefined
+  } else result = handleResult(lastAction, previousNumber, nextNumber)
+
+  switch (action) {
+    case 'equal':
+      nextNumber = result
+      previousNumber = result
+      break
+    case 'add':
+    case 'subtract':
+      nextNumber = result
+      break
+    case 'multiply':
+    case 'divide':
+      // result = handleResult(action, firstMultiplier, nextNumber)
+      firstMultiplier = previousNumber
+      // console.log('firstMultiplier', firstMultiplier)
+      // if (firstMultiplier) {
+      //   lastAction = action
+      //   result = handleResult(action, firstMultiplier, previousNumber)
+      // }
+      console.log('befr', result)
+      result = nextNumber < result ? nextNumber : 0
+      console.log('afr', result)
+      // result = nextNumber || 0
+      break
+  }
+
+  let actionSymbol = handleActionSymbols(action)
+
+  if (!historyExpression) historyExpression = currentExpression + actionSymbol
+  else if (lastAction !== 'equal') historyExpression += previousNumber + actionSymbol
+  else historyExpression = (result || nextNumber) + actionSymbol
+
+  currentExpression = ''
+  lastAction = action
+  canPutDot = true
 }
 
 const handleClick = (action, value) => {
@@ -49,55 +117,34 @@ const handleClick = (action, value) => {
         historyExpression = currentExpression
         break
       }
-      console.log('firstMultiplier', firstMultiplier)
+      // console.log('previousNumber', previousNumber)
+      // console.log('nextNumber', nextNumber)
+      handleCases(action)
+      // result = handleResult(lastAction, previousNumber, nextNumber)
+      // if (result === null) break
+      // nextNumber = result
 
-      result = handleResult(lastAction, firstMultiplier, secondMultiplier)
+      // historyExpression += currentExpression + ' = '
+      // currentExpression = ''
+      // lastAction = action
+      // canPutDot = true
       if (result === null) break
-      secondMultiplier = result
-      console.log('secondMultiplier', secondMultiplier)
-
-      historyExpression += currentExpression + ' = '
-
-      currentExpression = ''
-      lastAction = action
-      canPutDot = true
-
       break
     case 'add':
-      console.log('firstMultiplier', firstMultiplier)
-
-      result = handleResult(lastAction, firstMultiplier, secondMultiplier)
-
-      secondMultiplier = result
-      console.log('secondMultiplier', secondMultiplier)
-
-      if (!historyExpression) historyExpression = currentExpression + ' + '
-      else if (lastAction !== 'equal') historyExpression += firstMultiplier + ' + '
-      else historyExpression = result + ' + '
-
-      currentExpression = ''
-      lastAction = action
-      canPutDot = true
+      handleCases(action)
       break
     case 'subtract':
-      console.log('firstMultiplier', firstMultiplier)
-      result = handleResult(lastAction, firstMultiplier, secondMultiplier)
-
-      secondMultiplier = result
-      console.log('secondMultiplier', secondMultiplier)
-
-      if (!historyExpression) historyExpression = currentExpression
-      else if (lastAction !== 'equal') historyExpression += firstMultiplier + ' - '
-      else historyExpression = result + ' - '
-
-      currentExpression = ''
-      lastAction = action
-      canPutDot = true
-
+      handleCases(action)
+      break
+    case 'multiply':
+      handleCases(action)
+      break
+    case 'divide':
+      handleCases(action)
       break
     case 'dot':
       if (!canPutDot) break
-      else currentExpression += !currentExpression ? '0' + value : setNumbers(value, action)
+      else currentExpression += !currentExpression ? '0' + value : value
       canPutDot = false
       break
     case '0':
@@ -148,35 +195,20 @@ function setNumbers(value, action) {
   }
 
   currentExpression += value
-  firstMultiplier = Number(currentExpression)
+  previousNumber = Number(currentExpression)
 }
 
 function clearValues() {
-  firstMultiplier = 0
-  secondMultiplier = 0
+  nextNumber = 0
+  previousNumber = 0
   result = 0
   historyExpression = ''
   currentExpression = ''
   canPutDot = true
   lastAction = ''
+  firstMultiplier = 0
 }
 
 //sortByTypeOfOperations
 //handleSingleOperators
 //handleCoupleOperators
-
-// table2.onclick = function (event) {
-//   let td = event.target.closest('td')
-
-//   if (!td) return
-
-//   if (!table2.contains(td)) return
-
-//   if (td.dataset.action == 'clear') {
-//     currentExpressionElem.value = '0'
-//     historyExpressionElem.value = '0'
-//     return
-//   }
-
-//   console.log(td.innerText)
-// }
