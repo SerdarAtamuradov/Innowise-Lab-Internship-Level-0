@@ -1,15 +1,14 @@
 import '../style/style.css'
 
 let result = 0,
-  nextNumber = 0,
-  previousNumber = 0,
   historyExpression = ' ',
-  currentExpression = '',
+  currentExpression = ' ',
   canPutDot = true,
   lastAction = '',
-  firstMultiplier
-// eNumber = 2.71828182846,
-// memory = 0
+  symbol,
+  expressionString = '',
+  eNumber = 2.71828182846,
+  memory = 0
 
 const tables = document.querySelector('.tables'),
   historyExpressionElem = document.querySelector('.content__history'),
@@ -28,82 +27,25 @@ tables.onclick = function (event) {
   historyExpressionElem.innerText = historyExpression
 }
 
-function handleActionSymbols(action) {
-  switch (action) {
-    case 'add':
-      return ' + '
-    case 'subtract':
-      return ' - '
-    case 'multiply':
-      return ' × '
-    case 'divide':
-      return ' ÷ '
-    case 'equal':
-      return ' = '
-    default:
-      return
-  }
-}
+function handleOperation(action) {
+  symbol = handleActionSymbols(action)
 
-function handleResult(action, firstVar, secondVar) {
-  switch (action) {
-    case 'add':
-      return firstVar + secondVar
-    case 'subtract':
-      return secondVar - firstVar
-    case 'multiply':
-      return firstVar * secondVar
-    case 'divide':
-      return firstVar / secondVar
-    case 'equal':
-      return nextNumber
-    default:
-      return firstVar
-  }
-}
+  if (lastAction === 'equal') {
+    historyExpression = result + symbol
+    expressionString = result.toString() + symbol
+    console.log('expressionString', expressionString)
 
-function handleCases(action) {
-  // console.log('previousNumber', previousNumber)
-  console.log('nextNumber', nextNumber)
-
-  if (firstMultiplier) {
-    console.log('firstMultiplier', firstMultiplier)
-    console.log('previousNumber', previousNumber)
-    result += handleResult(lastAction, firstMultiplier, previousNumber)
-    console.log('result', result)
-    firstMultiplier = undefined
-  } else result = handleResult(lastAction, previousNumber, nextNumber)
-
-  switch (action) {
-    case 'equal':
-      nextNumber = result
-      previousNumber = result
-      break
-    case 'add':
-    case 'subtract':
-      nextNumber = result
-      break
-    case 'multiply':
-    case 'divide':
-      // result = handleResult(action, firstMultiplier, nextNumber)
-      firstMultiplier = previousNumber
-      // console.log('firstMultiplier', firstMultiplier)
-      // if (firstMultiplier) {
-      //   lastAction = action
-      //   result = handleResult(action, firstMultiplier, previousNumber)
-      // }
-      console.log('befr', result)
-      result = nextNumber < result ? nextNumber : 0
-      console.log('afr', result)
-      // result = nextNumber || 0
-      break
+    currentExpression = ''
+    lastAction = action
+    canPutDot = true
+    return
   }
 
-  let actionSymbol = handleActionSymbols(action)
+  if (action == 'equal') symbol = ''
+  expressionString += currentExpression + symbol
 
-  if (!historyExpression) historyExpression = currentExpression + actionSymbol
-  else if (lastAction !== 'equal') historyExpression += previousNumber + actionSymbol
-  else historyExpression = (result || nextNumber) + actionSymbol
+  historyExpression = expressionString
+  if (action == 'equal') historyExpression += ' ='
 
   currentExpression = ''
   lastAction = action
@@ -112,35 +54,26 @@ function handleCases(action) {
 
 const handleClick = (action, value) => {
   switch (action) {
+    case 'add':
+      handleOperation(action)
+      break
+    case 'subtract':
+      handleOperation(action)
+      break
+    case 'multiply':
+      handleOperation(action)
+      break
+    case 'divide':
+      handleOperation(action)
+      break
     case 'equal':
       if (!currentExpression || lastAction === 'equal') {
         historyExpression = currentExpression
         break
       }
-      // console.log('previousNumber', previousNumber)
-      // console.log('nextNumber', nextNumber)
-      handleCases(action)
-      // result = handleResult(lastAction, previousNumber, nextNumber)
-      // if (result === null) break
-      // nextNumber = result
-
-      // historyExpression += currentExpression + ' = '
-      // currentExpression = ''
-      // lastAction = action
-      // canPutDot = true
-      if (result === null) break
-      break
-    case 'add':
-      handleCases(action)
-      break
-    case 'subtract':
-      handleCases(action)
-      break
-    case 'multiply':
-      handleCases(action)
-      break
-    case 'divide':
-      handleCases(action)
+      handleOperation(action)
+      result = eval(expressionString)
+      console.log(result)
       break
     case 'dot':
       if (!canPutDot) break
@@ -153,35 +86,23 @@ const handleClick = (action, value) => {
       if (!currentExpression) setNumbers(value, action)
       else setNumbers(value, action)
       break
-    case '1':
-      setNumbers(value, action)
-      break
-    case '2':
-      setNumbers(value, action)
-      break
-    case '3':
-      setNumbers(value, action)
-      break
-    case '4':
-      setNumbers(value, action)
-      break
-    case '5':
-      setNumbers(value, action)
-      break
-    case '6':
-      setNumbers(value, action)
-      break
-    case '7':
-      setNumbers(value, action)
-      break
-    case '8':
-      setNumbers(value, action)
-      break
-    case '9':
-      setNumbers(value, action)
+    case 'clear-expression':
+      currentExpression = ''
+      result = 0
       break
     case 'clear':
       clearValues()
+      break
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+      setNumbers(value, action)
       break
     default:
       break
@@ -193,22 +114,33 @@ function setNumbers(value, action) {
     clearValues()
     lastAction = action
   }
-
-  currentExpression += value
-  previousNumber = Number(currentExpression)
+  if (currentExpression === '0') currentExpression = value
+  else currentExpression += value
 }
 
 function clearValues() {
-  nextNumber = 0
-  previousNumber = 0
   result = 0
   historyExpression = ''
   currentExpression = ''
   canPutDot = true
+  expressionString = ''
   lastAction = ''
-  firstMultiplier = 0
+  symbol = ''
 }
 
-//sortByTypeOfOperations
-//handleSingleOperators
-//handleCoupleOperators
+function handleActionSymbols(action) {
+  switch (action) {
+    case 'add':
+      return ' + '
+    case 'subtract':
+      return ' - '
+    case 'multiply':
+      return ' * '
+    case 'divide':
+      return ' / '
+    case 'equal':
+      return ' = '
+    default:
+      return
+  }
+}
