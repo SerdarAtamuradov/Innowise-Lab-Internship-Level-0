@@ -7,7 +7,6 @@ let result = 0,
   lastAction = '',
   symbol,
   expressionString = '',
-  eNumber = 2.71828182846,
   memory = 0,
   memoryChanged = false
 
@@ -43,15 +42,28 @@ const handleClick = (action, value) => {
       handleOperation(action)
       break
     case 'equal': {
-      console.log(currentExpression)
-      console.log(lastAction)
       if (!currentExpression || lastAction === 'equal') {
         historyExpression = currentExpression
         break
       }
       handleOperation(action)
       result = eval(expressionString)
-      // console.log(result)
+      break
+    }
+
+    case 'logarithm': {
+      if (!currentExpression) currentExpression = 'log('
+      else currentExpression += ' * log( '
+
+      lastAction = action
+      break
+    }
+
+    case 'natural-logarithm': {
+      if (!currentExpression) currentExpression = 'ln('
+      else currentExpression += ' * ln( '
+
+      lastAction = action
       break
     }
 
@@ -137,36 +149,17 @@ const handleClick = (action, value) => {
 function handleOperation(action) {
   symbol = handleActionSymbols(action)
 
-  if (lastAction === 'e') {
-    if (action == 'equal') symbol = ''
-    let eStr = 'e^('
-
-    let startPos = currentExpression.indexOf(eStr) + eStr.length
-    let endPos = currentExpression.indexOf(')', startPos)
-    console.log('startPos', startPos)
-    console.log('endPos', endPos)
-
-    if (startPos == -1) return
-
-    let cutString = currentExpression.slice(startPos, endPos)
-    console.log('cutString', cutString)
-
-    expressionString += `Math.exp(${cutString})` + symbol
-
-    historyExpression += eStr + cutString + ')' + symbol
-
-    if (action == 'equal') historyExpression += ' ='
-
-    currentExpression = ''
-    lastAction = action
-    canPutDot = true
-    return
+  switch (lastAction) {
+    case 'e':
+    case 'logarithm':
+    case 'natural-logarithm':
+      mathOperations(action, symbol)
+      return
   }
 
   if (lastAction === 'equal') {
     historyExpression = result + symbol
     expressionString = result.toString() + symbol
-    // console.log('expressionString', expressionString)
 
     currentExpression = ''
     lastAction = action
@@ -175,8 +168,6 @@ function handleOperation(action) {
   }
 
   if ((lastAction == 'divide' || lastAction == 'recall-memory') && currentExpression == '0') {
-    // console.log(memory)
-    // console.log(currentExpression)
     historyExpression += currentExpression + ' ='
     currentExpression = 'На ноль делить нельзя'
     expressionString = ''
@@ -212,6 +203,46 @@ function clearValues() {
   symbol = ''
 }
 
+function mathOperations(action, symbol) {
+  if (action == 'equal') symbol = ''
+  let mathNumber = 0,
+    startPos,
+    endPos,
+    cutString,
+    mathStr = handleActionSymbols(lastAction)
+
+  startPos = currentExpression.indexOf(mathStr) + mathStr.length
+  if (startPos == -1) return
+
+  endPos = currentExpression.indexOf(')', startPos)
+  if (endPos == -1) return
+  cutString = currentExpression.slice(startPos, endPos)
+
+  switch (lastAction) {
+    case 'e':
+      mathNumber = eval(`Math.exp(${cutString})`)
+      break
+    case 'logarithm':
+      mathNumber = eval(`Math.log10(${cutString})`)
+      break
+    case 'natural-logarithm':
+      mathNumber = eval(`Math.log(${cutString})`)
+      break
+    default:
+      break
+  }
+
+  expressionString += mathNumber + symbol
+
+  historyExpression += mathStr + cutString + ')' + symbol
+
+  if (action == 'equal') historyExpression += ' ='
+
+  currentExpression = ''
+  lastAction = action
+  canPutDot = true
+}
+
 function handleMemoryChange(action) {
   switch (action) {
     case 'add-memory':
@@ -236,8 +267,6 @@ function handleMemoryChange(action) {
   }
 }
 
-function handleENumber() {}
-
 function handleActionSymbols(action) {
   switch (action) {
     case 'add':
@@ -250,6 +279,12 @@ function handleActionSymbols(action) {
       return ' / '
     case 'equal':
       return ' = '
+    case 'e':
+      return 'e^('
+    case 'logarithm':
+      return 'log('
+    case 'natural-logarithm':
+      return 'ln('
     default:
       return
   }
