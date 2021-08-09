@@ -238,6 +238,8 @@ function clearValues() {
   expressionString = ''
   lastAction = ''
   symbol = ''
+  memory = 0
+  memoryChanged = false
 }
 
 function mathFunctions(action, symbol) {
@@ -355,12 +357,6 @@ function handleActionSymbols(action) {
       return 'log('
     case 'natural-logarithm':
       return 'ln('
-    case 'square-root-2':
-      return '√'
-    case 'square-root-3':
-      return 'cuberoot('
-    case 'square-root-y':
-      return ' yroot '
     default:
       return
   }
