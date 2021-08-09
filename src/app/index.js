@@ -2,13 +2,14 @@ import '../style/style.css'
 
 let result = 0,
   historyExpression = ' ',
-  currentExpression = ' ',
+  currentExpression = '',
   canPutDot = true,
   lastAction = '',
   symbol,
   expressionString = '',
   eNumber = 2.71828182846,
-  memory = 0
+  memory = 0,
+  memoryChanged = false
 
 const tables = document.querySelector('.tables'),
   historyExpressionElem = document.querySelector('.content__history'),
@@ -38,6 +39,15 @@ function handleOperation(action) {
     currentExpression = ''
     lastAction = action
     canPutDot = true
+    return
+  }
+
+  if ((lastAction == 'divide' || lastAction == 'recall-memory') && currentExpression == '0') {
+    console.log(memory)
+    console.log(currentExpression)
+    historyExpression += currentExpression + ' ='
+    currentExpression = 'На ноль делить нельзя'
+    expressionString = ''
     return
   }
 
@@ -75,6 +85,28 @@ const handleClick = (action, value) => {
       result = eval(expressionString)
       console.log(result)
       break
+    case 'clear-expression':
+      currentExpression = ''
+      result = 0
+      break
+    case 'clear':
+      clearValues()
+      break
+    case 'plus-minus':
+      if (currentExpression[0] === '-') {
+        if (currentExpression.length == 1) currentExpression = ''
+        else currentExpression = currentExpression.slice(1)
+        break
+      }
+      // else if (currentExpression[0] === '-' && currentExpression.length >= 2) {
+      //   currentExpression = currentExpression.slice(1)
+      //   break
+      // }
+
+      lastAction = currentExpression
+      currentExpression = '-' + lastAction.trim()
+      lastAction = action
+      break
     case 'dot':
       if (!canPutDot) break
       else currentExpression += !currentExpression ? '0' + value : value
@@ -86,13 +118,8 @@ const handleClick = (action, value) => {
       if (!currentExpression) setNumbers(value, action)
       else setNumbers(value, action)
       break
-    case 'clear-expression':
-      currentExpression = ''
-      result = 0
-      break
-    case 'clear':
-      clearValues()
-      break
+    case 'left-bracket':
+    case 'right-bracket':
     case '1':
     case '2':
     case '3':
@@ -103,6 +130,12 @@ const handleClick = (action, value) => {
     case '8':
     case '9':
       setNumbers(value, action)
+      break
+    case 'add-memory':
+    case 'sub-memory':
+    case 'recall-memory':
+    case 'reset-memory':
+      handleMemoryChange(action)
       break
     default:
       break
@@ -126,6 +159,30 @@ function clearValues() {
   expressionString = ''
   lastAction = ''
   symbol = ''
+}
+
+function handleMemoryChange(action) {
+  switch (action) {
+    case 'add-memory':
+      memory += Number(currentExpression)
+      memoryChanged = true
+      break
+    case 'sub-memory':
+      memory -= Number(currentExpression)
+      memoryChanged = true
+      break
+    case 'recall-memory':
+      if (memoryChanged) currentExpression = memory.toString()
+      memoryChanged = false
+      break
+    case 'reset-memory':
+      memoryChanged = false
+      memory = 0
+      currentExpression = ''
+      break
+    default:
+      break
+  }
 }
 
 function handleActionSymbols(action) {
