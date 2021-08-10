@@ -20,33 +20,38 @@
   flex-direction: column;
 }
 
-.inputs{
+.content{
   width: 60%;
-  padding: 1rem;
+  padding: 10px 20px;
   margin-bottom: 1rem;
   border: 1px solid #ebebeb;
   border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
-.history{
+.content span{
+  display: inline-block;
+}
+
+input{
+  border:none; 
+  border-color: #fff;
+  text-align: right;
+}
+
+.content__history{ 
   color:#70757a;
   font-size: 13px;
 }
 
-.history.right-text{
-  padding: 0 10px;
-}
-
-.current{
+.content__current{
   font-size: 24px;
 }
 
-.right-text{
-  text-align: right;
-  padding: 5px 10px;
-}
-
-.buttons{  
+.tables{  
   width: 60%;
   padding: 0.5rem;
   border: 1px solid #ebebeb;
@@ -55,15 +60,11 @@
   justify-content: space-between;
 }
 
-table{
-  margin: 5px;
-}
-
-.first-table{
+.tables__first-table{
   width: 40%;
 }
 
-.second-table{
+.tables__second-table{
   width: 60%;
 }
 
@@ -72,7 +73,7 @@ tr{
   justify-content: space-between;
 }
 
-.first-table td{  
+.tables__first-table td{  
   width: 33%;
   text-align: center;
   background: #dadce0;
@@ -85,7 +86,7 @@ tr{
   cursor: pointer;
 }
 
-.second-table td{  
+.tables__second-table td{  
   width: 25%;
   text-align: center;
   background: #dadce0;
@@ -98,22 +99,23 @@ tr{
   cursor: pointer;
 }
 
-.second-table td.number{
+.tables__second-table td.tables__number{
   background-color: #f1f3f4;
   border: 1px solid #f1f3f4;
 }
 
-table sup{
+.tables__second-table td.tables__equal{
+  background-color: #4285f4;
+  border: 1px solid #4285f4;
+  color: #fff;
+}
+
+.tables sup, .tables sub{
   font-size: 8px;
   line-height: 8px;
 }
 
-table sub{
-  font-size: 8px;
-  line-height: 8px;
-}
-
-table .koren sup{
+.tables .tables__square-root sup{
   font-size: 8px;
   line-height: 24px;
   position: relative;

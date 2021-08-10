@@ -1,0 +1,9 @@
+export let result = 0
+export let historyExpression = ' '
+export let currentExpression = ''
+export let canPutDot = true
+export let lastAction = ''
+export let symbol = ''
+export let expressionString = ''
+export let memory = 0
+export let memoryChanged = false

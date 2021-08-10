@@ -7,73 +7,77 @@
     <title>Innowise Lab Internship: Level 0</title>
   </head>
   <body>
-    <h1 class="title">Custom Calculator</h1>
+    <header><h1 class="title">Custom Calculator</h1></header>
     <main class="main">
-      <div class="inputs">
-        <div class="history right-text"><span class="history__text">1</span></div>
-        <div class="current right-text"><span class="current__text">222</span></div>
+      <div class="content">
+        <div>
+          <span class="content__history"></span>
+        </div>
+        <div>
+          <span class="content__current">0</span>
+        </div>
       </div>
-      <div class="buttons">
-        <table class="first-table">
+      <div class="tables">
+        <table class="tables__first-table">
           <tbody>
             <tr>
-              <td>m+</td>
-              <td>m-</td>
-              <td>mr</td>
+              <td data-action="add-memory">m+</td>
+              <td data-action="sub-memory">m-</td>
+              <td data-action="recall-memory">mr</td>
             </tr>
             <tr>
-              <td>mc</td>
-              <td>1/x</td>
-              <td>+/-</td>
+              <td data-action="reset-memory">mc</td>
+              <td data-action="one-div-x">1/x</td>
+              <td data-action="plus-minus">+/-</td>
             </tr>
             <tr>
-              <td>e<sup>x</sup></td>              
-              <td>ln</td>           
-              <td>log<sub>10</sub></td>              
+              <td data-action="e">e<sup>x</sup></td>              
+              <td data-action="natural-logarithm">ln</td>           
+              <td data-action="logarithm">log<sub>10</sub></td>              
             </tr>
             <tr>
-              <td>x<sup>2</sup></td>
-              <td>x<sup>3</sup></td>
-              <td>x<sup>y</sup></td>
+              <td data-action="power-2">x<sup>2</sup></td>
+              <td data-action="power-3">x<sup>3</sup></td>
+              <td data-action="power-y">x<sup>y</sup></td>
             </tr>
-            <tr class="koren">
-              <td><sup>2</sup>√x</td>
-              <td><sup>3</sup>√x</td>
-              <td><sup>y</sup>√x</td>
+            <tr class="tables__square-root">
+              <td data-action="square-root-2"><sup>2</sup>√x</td>
+              <td data-action="square-root-3"><sup>3</sup>√x</td>
+              <td data-action="square-root-y"><sup>y</sup>√x</td>
             </tr>            
           </tbody>
         </table>
-        <table class="second-table">
+        <table class="tables__second-table">
           <tbody>            
             <tr>
-              <td>(</td>
-              <td>)</td>
-              <td>%</td>
-              <td>AC</td>
+              <td data-action="left-bracket">(</td>
+              <td data-action="right-bracket">)</td>
+              <td data-action="clear-expression">CE</td>
+              <td data-action="clear">AC</td>
             </tr>            
             <tr>
-              <td class="number">7</td>
-              <td class="number">8</td>
-              <td class="number">9</td>
-              <td class="operation">÷</td>
+              <td class="tables__number" data-action="7">7</td>
+              <td class="tables__number" data-action="8">8</td>
+              <td class="tables__number" data-action="9">9</td>
+              <td data-action="divide">÷</td>
             </tr>            
             <tr>
-              <td class="number">4</td>
-              <td class="number">5</td>
-              <td class="number">6</td>
-              <td class="operation">×</td>
+              <td class="tables__number" data-action="4">4</td>
+              <td class="tables__number" data-action="5">5</td>
+              <td class="tables__number" data-action="6">6</td>
+              <td data-action="multiply">×</td>
             </tr>            
             <tr>
-              <td class="number">1</td>
-              <td class="number">2</td>
-              <td class="number">3</td>
-              <td class="operation">-</td>
+              <td class="tables__number" data-action="1">1</td>
+              <td class="tables__number" data-action="2">2</td>
+              <td class="tables__number" data-action="3">3</td>
+              <td data-action="subtract">−</td>
             </tr>            
             <tr>
-              <td class="number">0</td>
-              <td class="number">.</td>
-              <td class="equal">=</td>
-              <td class="operation">+</td>
+              <td class="tables__number" data-action="0">0</td>
+              <td class="tables__number" data-action="dot">.</td>
+              <td class="tables__equal" data-action="equal">=</td>
+              <td data-action="add">+</td>
             </tr>            
           </tbody>
         </table>
