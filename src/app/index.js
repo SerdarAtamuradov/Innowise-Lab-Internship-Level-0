@@ -246,8 +246,6 @@ function clearValues() {
   expressionString = '';
   lastAction = '';
   symbol = '';
-  memory = 0;
-  memoryChanged = false;
 }
 
 function mathFunctions(action, symbol) {
@@ -395,3 +393,8 @@ function handleMemoryChange(action) {
       break;
   }
 }
+
+//#48494A верхний темный
+//#898A8B верхний белый
+//#5A5B5C нижний темный
+//#E7E7E7 нижний белый
