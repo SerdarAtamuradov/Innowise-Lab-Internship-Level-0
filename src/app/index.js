@@ -1,11 +1,11 @@
 import '../style/style.css';
 
 let result = 0;
-let historyExpression = ' ';
+let historyExpression = '';
 let currentExpression = '';
 let canPutDot = true;
 let lastAction = '';
-let symbol;
+let symbol = '';
 let expressionString = '';
 let memory = 0;
 let memoryChanged = false;
