@@ -1,4 +1,18 @@
 import '../style/style.css';
+import * as ACTIONS from './Actions';
+import {
+  SYMBOL_POWER_Y,
+  SYMBOL_POWER_MATH,
+  SYMBOL_ONE_DIVIDE_X,
+  SYMBOL_SQUARE_ROOT_2,
+  SYMBOL_SQUARE_ROOT_3,
+  SYMBOL_SQUARE_ROOT_Y,
+  SYMBOL_LOGARITHM,
+  SYMBOL_NATURAL_LOGARITHM,
+  SYMBOL_E,
+  SYMBOL_EQUAL,
+  MESSAGE,
+} from './Expressions';
 
 let result = 0;
 let historyExpression = '';
@@ -29,14 +43,14 @@ tables.onclick = function (event) {
 
 const handleClick = (action, value) => {
   switch (action) {
-    case 'add':
-    case 'subtract':
-    case 'multiply':
-    case 'divide':
+    case ACTIONS.ADD:
+    case ACTIONS.SUBTRACT:
+    case ACTIONS.MULTIPLY:
+    case ACTIONS.DIVIDE:
       handleOperation(action);
       break;
-    case 'equal': {
-      if (!currentExpression || lastAction === 'equal') {
+    case ACTIONS.EQUAL: {
+      if (!currentExpression || lastAction === ACTIONS.EQUAL) {
         historyExpression = currentExpression;
         break;
       }
@@ -45,33 +59,33 @@ const handleClick = (action, value) => {
       break;
     }
 
-    case 'square-root-y': {
+    case ACTIONS.SQUARE_ROOT_Y: {
       if (!currentExpression) break;
       else {
-        currentExpression += 'ʸ√';
+        currentExpression += SYMBOL_SQUARE_ROOT_Y + SYMBOL_SQUARE_ROOT_2;
         historyExpression += currentExpression;
       }
 
       lastAction = action;
       break;
     }
-    case 'power-y': {
+    case ACTIONS.POWER_Y: {
       if (!currentExpression) break;
       else {
         expressionString += currentExpression;
-        currentExpression += '^';
+        currentExpression += SYMBOL_POWER_Y;
         historyExpression += currentExpression;
-        expressionString += ' ** ';
+        expressionString += SYMBOL_POWER_MATH;
       }
 
       lastAction = action;
       break;
     }
 
-    case 'square-root-2':
-    case 'square-root-3':
-    case 'power-2':
-    case 'power-3': {
+    case ACTIONS.POWER_2:
+    case ACTIONS.POWER_3:
+    case ACTIONS.SQUARE_ROOT_2:
+    case ACTIONS.SQUARE_ROOT_3: {
       if (!currentExpression) break;
       else handlePowerFunctions(action, Number(currentExpression));
 
@@ -79,48 +93,48 @@ const handleClick = (action, value) => {
       break;
     }
 
-    case 'logarithm': {
-      if (!currentExpression) currentExpression = 'log(';
-      else currentExpression += ' * log( ';
+    case ACTIONS.LOGARITHM: {
+      if (!currentExpression) currentExpression = SYMBOL_LOGARITHM;
+      else currentExpression += ' * ' + SYMBOL_LOGARITHM;
 
       lastAction = action;
       break;
     }
 
-    case 'natural-logarithm': {
-      if (!currentExpression) currentExpression = 'ln(';
-      else currentExpression += ' * ln( ';
+    case ACTIONS.NATURAL_LOGARITHM: {
+      if (!currentExpression) currentExpression = SYMBOL_NATURAL_LOGARITHM;
+      else currentExpression += ' * ' + SYMBOL_NATURAL_LOGARITHM;
 
       lastAction = action;
       break;
     }
 
-    case 'e': {
-      if (!currentExpression) currentExpression = 'e^(';
-      else currentExpression += ' * e^( ';
+    case ACTIONS.E: {
+      if (!currentExpression) currentExpression = SYMBOL_E;
+      else currentExpression += ' * ' + SYMBOL_E;
 
       lastAction = action;
       break;
     }
 
-    case 'one-div-x': {
-      if (!currentExpression) currentExpression = '1 / ';
-      else currentExpression += ' * (1 / ';
+    case ACTIONS.ONE_DIVIDE_X: {
+      if (!currentExpression) currentExpression = SYMBOL_ONE_DIVIDE_X;
+      else currentExpression += ' * (' + SYMBOL_ONE_DIVIDE_X;
 
       lastAction = action;
       break;
     }
 
-    case 'clear-expression':
+    case ACTIONS.CLEAR_EXPRESSION:
       currentExpression = '';
       result = 0;
       break;
 
-    case 'clear':
+    case ACTIONS.CLEAR:
       clearValues();
       break;
 
-    case 'plus-minus': {
+    case ACTIONS.PLUS_MINUS: {
       if (currentExpression[0] === '-') {
         if (currentExpression.length === 1) currentExpression = '';
         else currentExpression = currentExpression.slice(1);
@@ -133,7 +147,7 @@ const handleClick = (action, value) => {
       break;
     }
 
-    case 'dot': {
+    case ACTIONS.DOT: {
       if (!canPutDot) break;
       else currentExpression += !currentExpression ? '0' + value : value;
       canPutDot = false;
@@ -148,8 +162,8 @@ const handleClick = (action, value) => {
       break;
     }
 
-    case 'left-bracket':
-    case 'right-bracket':
+    case ACTIONS.LEFT_BRACKET:
+    case ACTIONS.RIGHT_BRACKET:
     case '1':
     case '2':
     case '3':
@@ -162,10 +176,10 @@ const handleClick = (action, value) => {
       setNumbers(value);
       break;
 
-    case 'add-memory':
-    case 'sub-memory':
-    case 'recall-memory':
-    case 'reset-memory':
+    case ACTIONS.ADD_MEMORY:
+    case ACTIONS.SUB_MEMORY:
+    case ACTIONS.RECALL_MEMORY:
+    case ACTIONS.RESET_MEMORY:
       handleMemoryChange(action);
       break;
 
@@ -178,14 +192,14 @@ function handleOperation(action) {
   symbol = handleActionSymbols(action);
 
   switch (lastAction) {
-    case 'e':
-    case 'logarithm':
-    case 'natural-logarithm':
+    case ACTIONS.E:
+    case ACTIONS.LOGARITHM:
+    case ACTIONS.NATURAL_LOGARITHM:
       mathFunctions(action, symbol);
       return;
   }
 
-  if (lastAction === 'equal') {
+  if (lastAction === ACTIONS.EQUAL) {
     historyExpression = result + symbol;
     expressionString = result.toString() + symbol;
 
@@ -193,24 +207,24 @@ function handleOperation(action) {
     lastAction = action;
     canPutDot = true;
     return;
-  } else if (lastAction === 'power-y' || lastAction === 'square-root-y') {
+  } else if (lastAction === ACTIONS.POWER_Y || lastAction === ACTIONS.SQUARE_ROOT_Y) {
     rootFunction(action, symbol);
     return;
   }
 
-  if ((lastAction === 'divide' || lastAction === 'recall-memory') && currentExpression === '0') {
-    historyExpression += currentExpression + ' =';
-    currentExpression = 'На ноль делить нельзя';
+  if ((lastAction === ACTIONS.DIVIDE || lastAction === ACTIONS.RECALL_MEMORY) && currentExpression === '0') {
+    historyExpression += currentExpression + SYMBOL_EQUAL;
+    currentExpression = MESSAGE;
     expressionString = '';
     return;
   }
 
-  if (action === 'equal') symbol = '';
+  if (action === ACTIONS.EQUAL) symbol = '';
   expressionString += currentExpression + symbol;
 
   historyExpression = expressionString;
 
-  if (action === 'equal') historyExpression += ' =';
+  if (action === ACTIONS.EQUAL) historyExpression += SYMBOL_EQUAL;
 
   currentExpression = '';
   lastAction = action;
@@ -218,7 +232,7 @@ function handleOperation(action) {
 }
 
 function setNumbers(value) {
-  if (lastAction === 'equal') clearValues();
+  if (lastAction === ACTIONS.EQUAL) clearValues();
 
   if (currentExpression === '0') currentExpression = value;
   else currentExpression += value;
@@ -237,7 +251,7 @@ function clearValues() {
 }
 
 function mathFunctions(action, symbol) {
-  if (action === 'equal') symbol = '';
+  if (action === ACTIONS.EQUAL) symbol = '';
   let mathNumber;
   let startPos;
   let endPos;
@@ -252,13 +266,13 @@ function mathFunctions(action, symbol) {
   cutString = currentExpression.slice(startPos, endPos);
 
   switch (lastAction) {
-    case 'e':
+    case ACTIONS.E:
       mathNumber = eval(`Math.exp(${cutString})`);
       break;
-    case 'logarithm':
+    case ACTIONS.LOGARITHM:
       mathNumber = eval(`Math.log10(${cutString})`);
       break;
-    case 'natural-logarithm':
+    case ACTIONS.NATURAL_LOGARITHM:
       mathNumber = eval(`Math.log(${cutString})`);
       break;
     default:
@@ -267,7 +281,7 @@ function mathFunctions(action, symbol) {
 
   expressionString += mathNumber + symbol;
   historyExpression += mathStr + cutString + ')' + symbol;
-  if (action === 'equal') historyExpression += ' =';
+  if (action === ACTIONS.EQUAL) historyExpression += SYMBOL_EQUAL;
 
   currentExpression = '';
   lastAction = action;
@@ -279,27 +293,27 @@ function rootFunction(action, symbol) {
   let startPos;
   let mathNumber;
 
-  if (lastAction === 'power-y') {
-    startPos = currentExpression.lastIndexOf('^') + 1;
+  if (lastAction === ACTIONS.POWER_Y) {
+    startPos = currentExpression.lastIndexOf(SYMBOL_POWER_Y) + 1;
     mathStr = currentExpression.slice(startPos);
     expressionString += mathStr;
   } else {
-    startPos = currentExpression.indexOf('ʸ');
+    startPos = currentExpression.indexOf(SYMBOL_SQUARE_ROOT_Y);
 
-    let endPos = currentExpression.lastIndexOf('√');
+    let endPos = currentExpression.lastIndexOf(SYMBOL_SQUARE_ROOT_2);
     mathNumber = currentExpression.slice(endPos + 1);
-    expressionString += mathNumber + ' ** ';
+    expressionString += mathNumber + SYMBOL_POWER_MATH;
 
     mathStr = currentExpression.slice(0, startPos);
     expressionString += `(1 / ${mathStr} )`;
   }
 
-  if (action === 'equal') symbol = '';
+  if (action === ACTIONS.EQUAL) symbol = '';
 
   expressionString += symbol;
-  historyExpression += lastAction === 'power-y' ? mathStr : mathNumber;
+  historyExpression += lastAction === ACTIONS.POWER_Y ? mathStr : mathNumber;
 
-  if (action === 'equal') historyExpression += ' =';
+  if (action === ACTIONS.EQUAL) historyExpression += SYMBOL_EQUAL;
 
   currentExpression = '';
   lastAction = action;
@@ -309,21 +323,21 @@ function rootFunction(action, symbol) {
 function handlePowerFunctions(action, value = 0) {
   let mathNumber;
   switch (action) {
-    case 'power-2':
+    case ACTIONS.POWER_2:
       mathNumber = value ** 2;
-      historyExpression += `${value}²` + ' =';
+      historyExpression += `${value}²` + SYMBOL_EQUAL;
       break;
-    case 'power-3':
+    case ACTIONS.POWER_3:
       mathNumber = value ** 3;
-      historyExpression += `${value}³` + ' =';
+      historyExpression += `${value}³` + SYMBOL_EQUAL;
       break;
-    case 'square-root-2':
+    case ACTIONS.SQUARE_ROOT_2:
       mathNumber = value ** (1 / 2);
-      historyExpression += `√${value}` + ' =';
+      historyExpression += SYMBOL_SQUARE_ROOT_2 + value + SYMBOL_EQUAL;
       break;
-    case 'square-root-3':
+    case ACTIONS.SQUARE_ROOT_3:
       mathNumber = value ** (1 / 3);
-      historyExpression += `∛${value}` + ' =';
+      historyExpression += SYMBOL_SQUARE_ROOT_3 + value + SYMBOL_EQUAL;
       break;
   }
 
@@ -337,22 +351,22 @@ function handlePowerFunctions(action, value = 0) {
 
 function handleActionSymbols(action) {
   switch (action) {
-    case 'add':
+    case ACTIONS.ADD:
       return ' + ';
-    case 'subtract':
+    case ACTIONS.SUBTRACT:
       return ' - ';
-    case 'multiply':
+    case ACTIONS.MULTIPLY:
       return ' * ';
-    case 'divide':
+    case ACTIONS.DIVIDE:
       return ' / ';
-    case 'equal':
-      return ' = ';
-    case 'e':
-      return 'e^(';
-    case 'logarithm':
-      return 'log(';
-    case 'natural-logarithm':
-      return 'ln(';
+    case ACTIONS.EQUAL:
+      return SYMBOL_EQUAL;
+    case ACTIONS.E:
+      return SYMBOL_E;
+    case ACTIONS.LOGARITHM:
+      return SYMBOL_LOGARITHM;
+    case ACTIONS.NATURAL_LOGARITHM:
+      return SYMBOL_NATURAL_LOGARITHM;
     default:
       return;
   }
@@ -360,19 +374,19 @@ function handleActionSymbols(action) {
 
 function handleMemoryChange(action) {
   switch (action) {
-    case 'add-memory':
+    case ACTIONS.ADD_MEMORY:
       memory += Number(currentExpression);
       memoryChanged = true;
       break;
-    case 'sub-memory':
+    case ACTIONS.SUB_MEMORY:
       memory -= Number(currentExpression);
       memoryChanged = true;
       break;
-    case 'recall-memory':
+    case ACTIONS.RECALL_MEMORY:
       if (memoryChanged) currentExpression = memory.toString();
       memoryChanged = false;
       break;
-    case 'reset-memory':
+    case ACTIONS.RESET_MEMORY:
       memoryChanged = false;
       memory = 0;
       currentExpression = '';
