@@ -4,7 +4,7 @@ import {
   SYMBOL_POWER_2,
   SYMBOL_POWER_3,
   SYMBOL_SQUARE_ROOT_2,
-  SYMBOL_SQUARE_ROOT_2,
+  SYMBOL_SQUARE_ROOT_3,
 } from '../Expressions'
 import {
   currentExpression,
