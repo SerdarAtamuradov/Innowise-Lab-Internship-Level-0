@@ -1,157 +1,151 @@
-import '../style/style.css'
+import '../style/style.css';
 
-let result = 0,
-  historyExpression = ' ',
-  currentExpression = '',
-  canPutDot = true,
-  lastAction = '',
-  symbol,
-  expressionString = '',
-  memory = 0,
-  memoryChanged = false
+let result = 0;
+let historyExpression = ' ';
+let currentExpression = '';
+let canPutDot = true;
+let lastAction = '';
+let symbol;
+let expressionString = '';
+let memory = 0;
+let memoryChanged = false;
 
-const tables = document.querySelector('.tables'),
-  historyExpressionElem = document.querySelector('.content__history'),
-  currentExpressionElem = document.querySelector('.content__current')
+const tables = document.querySelector('.tables');
+const historyExpressionElem = document.querySelector('.content__history');
+const currentExpressionElem = document.querySelector('.content__current');
 
 tables.onclick = function (event) {
-  let td = event.target.closest('td')
+  let td = event.target.closest('td');
 
-  if (!td) return
+  if (!td) return;
 
-  if (!tables.contains(td)) return
+  if (!tables.contains(td)) return;
 
-  handleClick(td.dataset.action, td.innerText)
+  handleClick(td.dataset.action, td.innerText);
 
-  currentExpressionElem.innerText = currentExpression || result
-  historyExpressionElem.innerText = historyExpression
-}
+  currentExpressionElem.innerText = currentExpression || result;
+  historyExpressionElem.innerText = historyExpression;
+};
 
 const handleClick = (action, value) => {
   switch (action) {
     case 'add':
-      handleOperation(action)
-      break
     case 'subtract':
-      handleOperation(action)
-      break
     case 'multiply':
-      handleOperation(action)
-      break
     case 'divide':
-      handleOperation(action)
-      break
+      handleOperation(action);
+      break;
     case 'equal': {
       if (!currentExpression || lastAction === 'equal') {
-        historyExpression = currentExpression
-        break
+        historyExpression = currentExpression;
+        break;
       }
-      handleOperation(action)
-      result = eval(expressionString)
-      break
+      handleOperation(action);
+      result = eval(expressionString);
+      break;
     }
 
     case 'square-root-y': {
-      if (!currentExpression) break
+      if (!currentExpression) break;
       else {
-        currentExpression += 'ʸ√'
-        historyExpression += currentExpression
+        currentExpression += 'ʸ√';
+        historyExpression += currentExpression;
       }
 
-      lastAction = action
-      break
+      lastAction = action;
+      break;
     }
     case 'power-y': {
-      if (!currentExpression) break
+      if (!currentExpression) break;
       else {
-        expressionString += currentExpression
-        currentExpression += '^'
-        historyExpression += currentExpression
-        expressionString += ' ** '
+        expressionString += currentExpression;
+        currentExpression += '^';
+        historyExpression += currentExpression;
+        expressionString += ' ** ';
       }
 
-      lastAction = action
-      break
+      lastAction = action;
+      break;
     }
 
     case 'square-root-2':
     case 'square-root-3':
     case 'power-2':
     case 'power-3': {
-      if (!currentExpression) break
-      else handlePowerFunctions(action, Number(currentExpression))
+      if (!currentExpression) break;
+      else handlePowerFunctions(action, Number(currentExpression));
 
-      lastAction = action
-      break
+      lastAction = action;
+      break;
     }
 
     case 'logarithm': {
-      if (!currentExpression) currentExpression = 'log('
-      else currentExpression += ' * log( '
+      if (!currentExpression) currentExpression = 'log(';
+      else currentExpression += ' * log( ';
 
-      lastAction = action
-      break
+      lastAction = action;
+      break;
     }
 
     case 'natural-logarithm': {
-      if (!currentExpression) currentExpression = 'ln('
-      else currentExpression += ' * ln( '
+      if (!currentExpression) currentExpression = 'ln(';
+      else currentExpression += ' * ln( ';
 
-      lastAction = action
-      break
+      lastAction = action;
+      break;
     }
 
     case 'e': {
-      if (!currentExpression) currentExpression = 'e^('
-      else currentExpression += ' * e^( '
+      if (!currentExpression) currentExpression = 'e^(';
+      else currentExpression += ' * e^( ';
 
-      lastAction = action
-      break
+      lastAction = action;
+      break;
     }
 
     case 'one-div-x': {
-      if (!currentExpression) currentExpression = '1 / '
-      else currentExpression += ' * (1 / '
+      if (!currentExpression) currentExpression = '1 / ';
+      else currentExpression += ' * (1 / ';
 
-      lastAction = action
-      break
+      lastAction = action;
+      break;
     }
 
     case 'clear-expression':
-      currentExpression = ''
-      result = 0
-      break
+      currentExpression = '';
+      result = 0;
+      break;
 
     case 'clear':
-      clearValues()
-      break
+      clearValues();
+      break;
 
     case 'plus-minus': {
       if (currentExpression[0] === '-') {
-        if (currentExpression.length == 1) currentExpression = ''
-        else currentExpression = currentExpression.slice(1)
-        break
+        if (currentExpression.length === 1) currentExpression = '';
+        else currentExpression = currentExpression.slice(1);
+        break;
       }
 
-      lastAction = currentExpression
-      currentExpression = '-' + lastAction.trim()
-      lastAction = action
-      break
+      lastAction = currentExpression;
+      currentExpression = '-' + lastAction.trim();
+      lastAction = action;
+      break;
     }
 
     case 'dot': {
-      if (!canPutDot) break
-      else currentExpression += !currentExpression ? '0' + value : value
-      canPutDot = false
-      break
+      if (!canPutDot) break;
+      else currentExpression += !currentExpression ? '0' + value : value;
+      canPutDot = false;
+      break;
     }
 
     case '0': {
-      if (currentExpression[0] == '0' && currentExpression[1] != '.') break
+      if (currentExpression[0] === '0' && currentExpression[1] !== '.') break;
 
-      if (!currentExpression) setNumbers(value)
-      else setNumbers(value)
-      break
+      if (!currentExpression) setNumbers(value);
+      else setNumbers(value);
+      break;
     }
 
     case 'left-bracket':
@@ -165,223 +159,225 @@ const handleClick = (action, value) => {
     case '7':
     case '8':
     case '9':
-      setNumbers(value)
-      break
+      setNumbers(value);
+      break;
 
     case 'add-memory':
     case 'sub-memory':
     case 'recall-memory':
     case 'reset-memory':
-      handleMemoryChange(action)
-      break
+      handleMemoryChange(action);
+      break;
 
     default:
-      break
+      break;
   }
-}
+};
 
 function handleOperation(action) {
-  symbol = handleActionSymbols(action)
+  symbol = handleActionSymbols(action);
 
   switch (lastAction) {
     case 'e':
     case 'logarithm':
     case 'natural-logarithm':
-      mathFunctions(action, symbol)
-      return
+      mathFunctions(action, symbol);
+      return;
   }
 
   if (lastAction === 'equal') {
-    historyExpression = result + symbol
-    expressionString = result.toString() + symbol
+    historyExpression = result + symbol;
+    expressionString = result.toString() + symbol;
 
-    currentExpression = ''
-    lastAction = action
-    canPutDot = true
-    return
+    currentExpression = '';
+    lastAction = action;
+    canPutDot = true;
+    return;
   } else if (lastAction === 'power-y' || lastAction === 'square-root-y') {
-    rootFunction(action, symbol)
-    return
+    rootFunction(action, symbol);
+    return;
   }
 
-  if ((lastAction == 'divide' || lastAction == 'recall-memory') && currentExpression == '0') {
-    historyExpression += currentExpression + ' ='
-    currentExpression = 'На ноль делить нельзя'
-    expressionString = ''
-    return
+  if ((lastAction === 'divide' || lastAction === 'recall-memory') && currentExpression === '0') {
+    historyExpression += currentExpression + ' =';
+    currentExpression = 'На ноль делить нельзя';
+    expressionString = '';
+    return;
   }
 
-  if (action == 'equal') symbol = ''
-  expressionString += currentExpression + symbol
+  if (action === 'equal') symbol = '';
+  expressionString += currentExpression + symbol;
 
-  historyExpression = expressionString
+  historyExpression = expressionString;
 
-  if (action == 'equal') historyExpression += ' ='
+  if (action === 'equal') historyExpression += ' =';
 
-  currentExpression = ''
-  lastAction = action
-  canPutDot = true
+  currentExpression = '';
+  lastAction = action;
+  canPutDot = true;
 }
 
 function setNumbers(value) {
-  if (lastAction === 'equal') clearValues()
+  if (lastAction === 'equal') clearValues();
 
-  if (currentExpression === '0') currentExpression = value
-  else currentExpression += value
+  if (currentExpression === '0') currentExpression = value;
+  else currentExpression += value;
 }
 
 function clearValues() {
-  result = 0
-  historyExpression = ''
-  currentExpression = ''
-  canPutDot = true
-  expressionString = ''
-  lastAction = ''
-  symbol = ''
-  memory = 0
-  memoryChanged = false
+  result = 0;
+  historyExpression = '';
+  currentExpression = '';
+  canPutDot = true;
+  expressionString = '';
+  lastAction = '';
+  symbol = '';
+  memory = 0;
+  memoryChanged = false;
 }
 
 function mathFunctions(action, symbol) {
-  if (action == 'equal') symbol = ''
-  let mathNumber,
-    startPos,
-    endPos,
-    cutString,
-    mathStr = handleActionSymbols(lastAction)
+  if (action === 'equal') symbol = '';
+  let mathNumber;
+  let startPos;
+  let endPos;
+  let cutString;
+  let mathStr = handleActionSymbols(lastAction);
 
-  startPos = currentExpression.indexOf(mathStr) + mathStr.length
-  if (startPos == -1) return
+  startPos = currentExpression.indexOf(mathStr) + mathStr.length;
+  if (startPos === -1) return;
 
-  endPos = currentExpression.indexOf(')', startPos)
-  if (endPos == -1) return
-  cutString = currentExpression.slice(startPos, endPos)
+  endPos = currentExpression.indexOf(')', startPos);
+  if (endPos === -1) return;
+  cutString = currentExpression.slice(startPos, endPos);
 
   switch (lastAction) {
     case 'e':
-      mathNumber = eval(`Math.exp(${cutString})`)
-      break
+      mathNumber = eval(`Math.exp(${cutString})`);
+      break;
     case 'logarithm':
-      mathNumber = eval(`Math.log10(${cutString})`)
-      break
+      mathNumber = eval(`Math.log10(${cutString})`);
+      break;
     case 'natural-logarithm':
-      mathNumber = eval(`Math.log(${cutString})`)
-      break
+      mathNumber = eval(`Math.log(${cutString})`);
+      break;
     default:
-      break
+      break;
   }
 
-  expressionString += mathNumber + symbol
-  historyExpression += mathStr + cutString + ')' + symbol
-  if (action == 'equal') historyExpression += ' ='
+  expressionString += mathNumber + symbol;
+  historyExpression += mathStr + cutString + ')' + symbol;
+  if (action === 'equal') historyExpression += ' =';
 
-  currentExpression = ''
-  lastAction = action
-  canPutDot = true
+  currentExpression = '';
+  lastAction = action;
+  canPutDot = true;
 }
 
 function rootFunction(action, symbol) {
-  let mathStr, startPos, mathNumber
+  let mathStr;
+  let startPos;
+  let mathNumber;
 
   if (lastAction === 'power-y') {
-    startPos = currentExpression.lastIndexOf('^') + 1
-    mathStr = currentExpression.slice(startPos)
-    expressionString += mathStr
+    startPos = currentExpression.lastIndexOf('^') + 1;
+    mathStr = currentExpression.slice(startPos);
+    expressionString += mathStr;
   } else {
-    startPos = currentExpression.indexOf('ʸ')
+    startPos = currentExpression.indexOf('ʸ');
 
-    let endPos = currentExpression.lastIndexOf('√')
-    mathNumber = currentExpression.slice(endPos + 1)
-    expressionString += mathNumber + ' ** '
+    let endPos = currentExpression.lastIndexOf('√');
+    mathNumber = currentExpression.slice(endPos + 1);
+    expressionString += mathNumber + ' ** ';
 
-    mathStr = currentExpression.slice(0, startPos)
-    expressionString += `(1 / ${mathStr} )`
+    mathStr = currentExpression.slice(0, startPos);
+    expressionString += `(1 / ${mathStr} )`;
   }
 
-  if (action == 'equal') symbol = ''
+  if (action === 'equal') symbol = '';
 
-  expressionString += symbol
-  historyExpression += lastAction === 'power-y' ? mathStr : mathNumber
+  expressionString += symbol;
+  historyExpression += lastAction === 'power-y' ? mathStr : mathNumber;
 
-  if (action == 'equal') historyExpression += ' ='
+  if (action === 'equal') historyExpression += ' =';
 
-  currentExpression = ''
-  lastAction = action
-  canPutDot = true
+  currentExpression = '';
+  lastAction = action;
+  canPutDot = true;
 }
 
 function handlePowerFunctions(action, value = 0) {
-  let mathNumber
+  let mathNumber;
   switch (action) {
     case 'power-2':
-      mathNumber = value ** 2
-      historyExpression += `${value}²` + ' ='
-      break
+      mathNumber = value ** 2;
+      historyExpression += `${value}²` + ' =';
+      break;
     case 'power-3':
-      mathNumber = value ** 3
-      historyExpression += `${value}³` + ' ='
-      break
+      mathNumber = value ** 3;
+      historyExpression += `${value}³` + ' =';
+      break;
     case 'square-root-2':
-      mathNumber = value ** (1 / 2)
-      historyExpression += `√${value}` + ' ='
-      break
+      mathNumber = value ** (1 / 2);
+      historyExpression += `√${value}` + ' =';
+      break;
     case 'square-root-3':
-      mathNumber = value ** (1 / 3)
-      historyExpression += `∛${value}` + ' ='
-      break
+      mathNumber = value ** (1 / 3);
+      historyExpression += `∛${value}` + ' =';
+      break;
   }
 
-  expressionString += mathNumber.toString()
-  result = eval(expressionString)
+  expressionString += mathNumber.toString();
+  result = eval(expressionString);
 
-  currentExpression = ''
-  lastAction = action
-  canPutDot = true
+  currentExpression = '';
+  lastAction = action;
+  canPutDot = true;
 }
 
 function handleActionSymbols(action) {
   switch (action) {
     case 'add':
-      return ' + '
+      return ' + ';
     case 'subtract':
-      return ' - '
+      return ' - ';
     case 'multiply':
-      return ' * '
+      return ' * ';
     case 'divide':
-      return ' / '
+      return ' / ';
     case 'equal':
-      return ' = '
+      return ' = ';
     case 'e':
-      return 'e^('
+      return 'e^(';
     case 'logarithm':
-      return 'log('
+      return 'log(';
     case 'natural-logarithm':
-      return 'ln('
+      return 'ln(';
     default:
-      return
+      return;
   }
 }
 
 function handleMemoryChange(action) {
   switch (action) {
     case 'add-memory':
-      memory += Number(currentExpression)
-      memoryChanged = true
-      break
+      memory += Number(currentExpression);
+      memoryChanged = true;
+      break;
     case 'sub-memory':
-      memory -= Number(currentExpression)
-      memoryChanged = true
-      break
+      memory -= Number(currentExpression);
+      memoryChanged = true;
+      break;
     case 'recall-memory':
-      if (memoryChanged) currentExpression = memory.toString()
-      memoryChanged = false
-      break
+      if (memoryChanged) currentExpression = memory.toString();
+      memoryChanged = false;
+      break;
     case 'reset-memory':
-      memoryChanged = false
-      memory = 0
-      currentExpression = ''
-      break
+      memoryChanged = false;
+      memory = 0;
+      currentExpression = '';
+      break;
     default:
-      break
+      break;
   }
 }
