@@ -8,7 +8,7 @@
 }
 
 .title {
-  margin: 1rem;
+  margin: 2rem;
   text-align: center;
   color: #585454;
 }
@@ -106,7 +106,7 @@ tr{
 
 .tables__second-table td.tables__equal{
   background-color: #4285f4;
-  border: 1px solid #4285f4;
+  border: 1px solid #555555;
   color: #fff;
 }
 
@@ -117,7 +117,7 @@ tr{
 
 .tables .tables__square-root sup{
   font-size: 8px;
-  line-height: 24px;
+  line-height: 23px;
   position: relative;
   left:6px;
   top:-6px;

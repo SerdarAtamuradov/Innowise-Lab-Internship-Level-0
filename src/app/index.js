@@ -12,6 +12,12 @@ import {
   SYMBOL_E,
   SYMBOL_EQUAL,
   MESSAGE,
+  SYMBOL_ADD,
+  SYMBOL_SUBTRACT,
+  SYMBOL_MULTIPLY,
+  SYMBOL_DIVIDE,
+  SYMBOL_POWER_2,
+  SYMBOL_POWER_3,
 } from './Expressions';
 
 let result = 0;
@@ -96,7 +102,7 @@ const handleClick = (action, value) => {
 
     case ACTIONS.LOGARITHM: {
       if (!currentExpression) currentExpression = SYMBOL_LOGARITHM;
-      else currentExpression += ' * ' + SYMBOL_LOGARITHM;
+      else currentExpression += SYMBOL_MULTIPLY + SYMBOL_LOGARITHM;
 
       lastAction = action;
       break;
@@ -104,7 +110,7 @@ const handleClick = (action, value) => {
 
     case ACTIONS.NATURAL_LOGARITHM: {
       if (!currentExpression) currentExpression = SYMBOL_NATURAL_LOGARITHM;
-      else currentExpression += ' * ' + SYMBOL_NATURAL_LOGARITHM;
+      else currentExpression += SYMBOL_MULTIPLY + SYMBOL_NATURAL_LOGARITHM;
 
       lastAction = action;
       break;
@@ -112,7 +118,7 @@ const handleClick = (action, value) => {
 
     case ACTIONS.E: {
       if (!currentExpression) currentExpression = SYMBOL_E;
-      else currentExpression += ' * ' + SYMBOL_E;
+      else currentExpression += SYMBOL_MULTIPLY + SYMBOL_E;
 
       lastAction = action;
       break;
@@ -324,15 +330,15 @@ function handlePowerFunctions(action, value = 0) {
   switch (action) {
     case ACTIONS.POWER_2:
       mathNumber = value ** 2;
-      historyExpression += `${value}²` + SYMBOL_EQUAL;
+      historyExpression += SYMBOL_POWER_2 + value + SYMBOL_EQUAL;
       break;
     case ACTIONS.POWER_3:
       mathNumber = value ** 3;
-      historyExpression += `${value}³` + SYMBOL_EQUAL;
+      historyExpression += value + SYMBOL_POWER_3 + SYMBOL_EQUAL;
       break;
     case ACTIONS.SQUARE_ROOT_2:
       mathNumber = value ** (1 / 2);
-      historyExpression += SYMBOL_SQUARE_ROOT_2 + value + SYMBOL_EQUAL;
+      historyExpression += value + SYMBOL_SQUARE_ROOT_2 + SYMBOL_EQUAL;
       break;
     case ACTIONS.SQUARE_ROOT_3:
       mathNumber = value ** (1 / 3);
@@ -351,13 +357,13 @@ function handlePowerFunctions(action, value = 0) {
 function handleActionSymbols(action) {
   switch (action) {
     case ACTIONS.ADD:
-      return ' + ';
+      return SYMBOL_ADD;
     case ACTIONS.SUBTRACT:
-      return ' - ';
+      return SYMBOL_SUBTRACT;
     case ACTIONS.MULTIPLY:
-      return ' * ';
+      return SYMBOL_MULTIPLY;
     case ACTIONS.DIVIDE:
-      return ' / ';
+      return SYMBOL_DIVIDE;
     case ACTIONS.EQUAL:
       return SYMBOL_EQUAL;
     case ACTIONS.E:
@@ -399,19 +405,18 @@ isBlackTheme = true;
 if (isBlackTheme) {
   const mainElem = document.querySelector('.content');
   const title = document.querySelector('.title');
-  const tables = document.querySelector('.tables');
   const td = document.querySelectorAll('td');
   const numbers = document.querySelectorAll('.tables__number');
-  const orangeButtons = document.querySelectorAll('.tables__second-table tr td:last-child');
+  const orangeButtons = document.querySelectorAll('.tables__second-table td:last-child');
 
   document.body.style.backgroundColor = '#282A35';
-  title.style.color = 'white';
+  title.style.color = '#FEA00B';
   tables.style.backgroundColor = '#5A5B5C';
 
   td.forEach(item => {
     item.style.color = 'white';
-    item.style.backgroundColor = '#5A5B5C';
-    item.style.border = '1px solid #48494A';
+    item.style.backgroundColor = '#555555';
+    item.style.border = '1px solid #757677';
   });
 
   numbers.forEach(item => {
@@ -433,6 +438,6 @@ if (isBlackTheme) {
   });
 
   mainElem.style.backgroundColor = '#48494A';
-  historyExpressionElem.style.color = 'rgba(255, 255, 255, 0.4)';
+  historyExpressionElem.style.color = '#d3a967';
   currentExpressionElem.style.color = 'white';
 }
