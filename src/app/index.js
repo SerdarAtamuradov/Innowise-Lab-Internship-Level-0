@@ -23,6 +23,7 @@ let symbol = '';
 let expressionString = '';
 let memory = 0;
 let memoryChanged = false;
+let isBlackTheme = false;
 
 const tables = document.querySelector('.tables');
 const historyExpressionElem = document.querySelector('.content__history');
@@ -394,7 +395,44 @@ function handleMemoryChange(action) {
   }
 }
 
-//#48494A верхний темный
-//#898A8B верхний белый
-//#5A5B5C нижний темный
-//#E7E7E7 нижний белый
+isBlackTheme = true;
+if (isBlackTheme) {
+  const mainElem = document.querySelector('.content');
+  const title = document.querySelector('.title');
+  const tables = document.querySelector('.tables');
+  const td = document.querySelectorAll('td');
+  const numbers = document.querySelectorAll('.tables__number');
+  const orangeButtons = document.querySelectorAll('.tables__second-table tr td:last-child');
+
+  document.body.style.backgroundColor = '#282A35';
+  title.style.color = 'white';
+  tables.style.backgroundColor = '#5A5B5C';
+
+  td.forEach(item => {
+    item.style.color = 'white';
+    item.style.backgroundColor = '#5A5B5C';
+    item.style.border = '1px solid #48494A';
+  });
+
+  numbers.forEach(item => {
+    item.style.color = 'white';
+    item.style.backgroundColor = '#757677';
+    item.style.border = '1px solid #48494A';
+    if (item.dataset.action == 'dot') {
+      let equal = item.nextElementSibling;
+      equal.style.color = 'white';
+      equal.style.backgroundColor = '#757677';
+      equal.style.border = '1px solid #48494A';
+    }
+  });
+
+  orangeButtons.forEach(item => {
+    item.style.color = 'white';
+    item.style.backgroundColor = '#FEA00B';
+    item.style.border = '1px solid #48494A';
+  });
+
+  mainElem.style.backgroundColor = '#48494A';
+  historyExpressionElem.style.color = 'rgba(255, 255, 255, 0.4)';
+  currentExpressionElem.style.color = 'white';
+}
